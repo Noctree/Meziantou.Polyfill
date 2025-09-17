@@ -891,6 +891,29 @@ public class UnitTest1
     }
 
     [Fact]
+    public void IEnumerable_TryGetNonEnumeratedCount()
+    {
+        int[] a = [1, 2, 3];
+        List<int> b = [1, 2, 3, 4, 5];
+        ICollection<Type> c = Array.Empty<Type>();
+        var d = CustomCollectionWithBuilder.Create(["a", "b"]);
+        IEnumerable<int> e = null;
+
+        Assert.True(a.TryGetNonEnumeratedCount(out var aCount));
+        Assert.Equal(aCount, a.Length);
+        Assert.True(b.TryGetNonEnumeratedCount(out var bCount));
+        Assert.Equal(bCount, b.Count);
+        Assert.True(c.TryGetNonEnumeratedCount(out var cCount));
+        Assert.Equal(cCount, c.Count);
+        Assert.False(d.TryGetNonEnumeratedCount(out _));
+        Assert.Throws<ArgumentNullException>(() =>
+            {
+                e!.TryGetNonEnumeratedCount(out _);
+            }
+        );
+    }
+
+    [Fact]
     public void Type_IsAssignableTo()
     {
         Assert.True(typeof(string).IsAssignableTo(typeof(object)));
